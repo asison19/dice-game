@@ -1,0 +1,8 @@
+# Don't track these
+
+# IntelliJ project files
+.idea/
+out/
+CS245-homework2.iml
+
+*.java~
