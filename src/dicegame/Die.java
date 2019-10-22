@@ -38,7 +38,7 @@ public class Die {
                 case 4: setImage(diceImages[3]); break;
                 case 5: setImage(diceImages[4]); break;
                 case 6: setImage(diceImages[5]); break;
-                default: System.out.println("Something went wrong at method setHeld of class die, switch 1"); break;
+                default: System.out.println("Error: at method setHeld of class die, switch 1"); break;
             }
         } else {
             switch (value) {
@@ -48,7 +48,7 @@ public class Die {
                 case 4: setImage(heldImages[3]); break;
                 case 5: setImage(heldImages[4]); break;
                 case 6: setImage(heldImages[5]); break;
-                default: System.out.println("Something went wrong at method setHeld of class die, switch 2"); break;
+                default: System.out.println("Error: at method setHeld of class die, switch 2"); break;
             }
         }
     }
@@ -60,6 +60,7 @@ public class Die {
     public int roll() {
         Random rand = new Random();
         value = rand.nextInt(5) + 1;
+        rollImage();
         return value;
     }
 
@@ -76,5 +77,15 @@ public class Die {
         view.setImage(image);
     }
 
-
+    private void rollImage(){
+        switch (value) {
+            case 1: setImage(diceImages[0]); break;
+            case 2: setImage(diceImages[1]); break;
+            case 3: setImage(diceImages[2]); break;
+            case 4: setImage(diceImages[3]); break;
+            case 5: setImage(diceImages[4]); break;
+            case 6: setImage(diceImages[5]); break;
+            default: System.out.println("Error: at method rollImage of class die, switch"); break;
+        }
+    }
 }
