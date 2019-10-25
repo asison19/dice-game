@@ -1,0 +1,25 @@
+.root
+{
+    -fx-background-color: radial-gradient( center 50% 50%, radius 115%, #8F2727, #000000);
+}
+
+.label
+{
+    -fx-font-family: cursive;
+    -fx-font-size: 18pt;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F9E4B7;
+}
+
+.button
+{
+    -fx-text-fill: #F9E4B7;
+    -fx-font-family: cursive;
+    -fx-font-size: 16pt;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-background-color: #660C0C;
+    -fx-border-color: #000000;
+}
+

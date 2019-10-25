@@ -3,7 +3,7 @@ Created By: Andrew Sison
 Professor: Jonathan Johannsen, and Tony Diaz.
 Subject: CS-2450 Programming GUIs.
 Dice Game similar to poker for all your gambling needs.
- */
+*/
 
 package dicegame;
 
@@ -21,7 +21,6 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.FileNotFoundException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +28,7 @@ public class DiceGame extends Application {
 
     private final int DICE_AMOUNT = 5;
     private BorderPane borderPane;
+    private static boolean isReady;
 
     //center, top and bottom of border pane
     private HBox diceLayout; // this will be on the center of the border pane
@@ -39,19 +39,21 @@ public class DiceGame extends Application {
     private Label overallScoreLabel; // this will be on the top side of the border pane, also contains overall score
     private String overallScoreText;
     private int overallScore = 0;
+
     private Label roundScoreLabel; // contains the score of the current round
     private String roundScoreText;
     private int roundScore = 0;
+
+    private final int ROLL_MAX = 3;
     private Label rollsRemainingLabel;
     private String rollsRemainingText;
     private int rollsRemaining;
-    //ImageView[] diceViews; // array of the dice's images
+
     private Image[] diceImages;
     private Image[] heldImages;
+
     private Die[] dice;
-    //boolean[] isHeld; // array of the dice's being held
-    private final int ROLL_MAX = 3;
-    private static int rollCount = 0; // roll count is at most, ROLL_MAX
+
     private Button button;
     private String buttonText;
 
@@ -61,36 +63,34 @@ public class DiceGame extends Application {
     private boolean preserveRatio = false;
     private boolean smooth = true;
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
+        /* Defining Objects and Variables */
+        isReady = false;
 
-
-        /* Declaring Objects and Variables */
-
-        AtomicBoolean firstRound = new AtomicBoolean(true);
-
-        // node holders
+        /* node holders */
         borderPane = new BorderPane();
         diceLayout = new HBox();
         top = new VBox();
         bottom = new VBox();
 
+        /* Setting Labels */
         overallScoreText = "Overall Score: ";
         overallScoreLabel = new Label(overallScoreText);
 
         roundScoreText = "Round Score: ";
         roundScoreLabel = new Label("Round Score: ");
 
-        // this should also then show the type of hand the player gets at the end of all the rolls
+        /* Rolls remaining for the player*/
         rollsRemaining = 0;
         rollsRemainingText = "Rolls Remaining: ";
         rollsRemainingLabel = new Label(rollsRemainingText + rollsRemaining);
 
+        /* Images for the dice */
         diceImages = new Image[6];
         heldImages = new Image[6];
         dice = new Die[DICE_AMOUNT];
@@ -109,10 +109,11 @@ public class DiceGame extends Application {
         borderPane.setCenter(diceLayout);
         borderPane.setBottom(bottom);
 
-        // formatting
-        borderPane.setPrefSize(600,300);
+        /* formatting */
+        borderPane.setPrefSize(600,400);
         borderPane.setMargin(bottom, new Insets(0,0,30,0));
         borderPane.setMargin(top, new Insets(30,0,0,0));
+        borderPane.setMargin(diceLayout, new Insets(15,15,15,15));
 
         diceLayout.setSpacing(10);
         diceLayout.setAlignment(Pos.CENTER);
@@ -121,8 +122,6 @@ public class DiceGame extends Application {
 
         bottom.setAlignment(Pos.CENTER);
         bottom.setSpacing(15);
-
-        // overallScoreLabel.setFont(Font.font("Arial", 25)); TODO use CSS for this
 
         // set the images that will be used for the dice
         try {
@@ -139,15 +138,15 @@ public class DiceGame extends Application {
             // set the logic for the "Holding" of dice.
             int captureI = i;
             dice[i].getView().setOnMouseClicked(mouseEvent -> {
-                if (rollCount <= ROLL_MAX) {
+                if (isReady) {
                     dice[captureI].setHeld(!dice[captureI].isHeld());
                 }
             });
         }
 
         button.setOnAction(event -> {
+            isReady = true;
             if(rollsRemaining > 0) {
-                setAllReady(true);
                 rollsRemaining--;
                 rollsRemainingLabel.setText(rollsRemainingText + rollsRemaining);
 
@@ -156,51 +155,41 @@ public class DiceGame extends Application {
                 }
 
                 if(rollsRemaining == 0) {
-                    // TODO calculate round score
+                    roundScore = calculateRoundScore();
+                    roundScoreLabel.setText(roundScoreText + roundScore);
 
                     // turn button to reset game
+                    // clicking the play again will go to the else of the button action
                     button.setText("Play Again");
-                    setAllReady(false);
 
                 }
             } else { // no more rolls remaining
 
-                if(!firstRound.get())
-                    roundScore = calculateRoundScore();
-                else
-                    firstRound.set(false);
-
                 overallScore += roundScore;
                 overallScoreLabel.setText(overallScoreText + overallScore);
-
-                // TODO stop the board and reset should get rid of what's held
+                roundScoreLabel.setText(roundScoreText);
+                isReady = false;
                 resetGame();
-
-                button.setText(buttonText);
-                rollsRemaining = ROLL_MAX;
-                rollsRemainingLabel.setText(rollsRemainingText + rollsRemaining);
             }
 
         });
 
-        setAllReady(false);
-
-        primaryStage.setScene((new Scene(borderPane)));
+        Scene scene = new Scene(borderPane);
+        scene.getStylesheets().add("dicegame/styles.css");
+        primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    private void setAllReady(boolean bool) {
-        for(int i =0 ; i < DICE_AMOUNT; i++)
-            dice[i].setReady(bool);
     }
 
     private void resetGame() {
         for(int i = 0; i < DICE_AMOUNT; i++) {
             dice[i].reset();
         }
+        rollsRemaining = ROLL_MAX;
+        button.setText(buttonText);
+        rollsRemainingLabel.setText(rollsRemainingText + rollsRemaining);
     }
 
-    // not scalable. only works with 5 dice
+    // not scalable. Currently only works with 5 dice
     private int calculateRoundScore(){
 
         Set<Integer> values= new HashSet<>(); // this is used to find pairs

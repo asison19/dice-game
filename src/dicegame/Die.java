@@ -7,11 +7,11 @@ import java.util.Random;
 
 public class Die {
     private boolean held;
-    private boolean ready;
+    //private boolean ready;
     private int value;
 
-    Image[] diceImages;
-    Image[] heldImages;
+    private static Image[] diceImages;
+    private static Image[] heldImages;
     private ImageView view;
     private Image image;
 
@@ -22,7 +22,7 @@ public class Die {
         this.heldImages = heldImages;
 
         held = false;
-        ready = false;
+        //ready = false;
         value = 1;
         image = diceImages[0]; // TODO add default image?
         view = new ImageView(image);
@@ -30,9 +30,7 @@ public class Die {
 
     public void setHeld(boolean held) {
         this.held = held;
-        // boolean for whether the held is true or false,
-        // which equates to true or false for either true or false respectively.
-        if(!held && ready ? true : false) {
+        if(!held) {
             switch (value) {
                 case 1: setImage(diceImages[0]); break;
                 case 2: setImage(diceImages[1]); break;
@@ -43,7 +41,7 @@ public class Die {
                 default: System.out.println("Error: at method setHeld of class die, switch 1"); break;
             }
             // this.held = held;
-        } else if (ready) {
+        } else {
             switch (value) {
                 case 1: setImage(heldImages[0]); break;
                 case 2: setImage(heldImages[1]); break;
@@ -62,7 +60,7 @@ public class Die {
     }
 
     public void roll() {
-        if(!held && ready) {
+        if(!held) {
             Random rand = new Random();
             value = rand.nextInt(5) + 1;
             rollImage();
@@ -104,13 +102,6 @@ public class Die {
             setImage(diceImages[value - 1]);
         }
         // ready = true;
-    }
-
-    public void setReady(boolean bool) {
-        if(bool)
-            ready = true;
-        else
-            ready = false;
     }
 
 }
