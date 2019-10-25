@@ -203,38 +203,51 @@ public class DiceGame extends Application {
         /* check for the best hand from highest to lowest */
 
         // 5 of a kind
-        if(values.size() == 1) // if only 1 distinct elements
+        if(values.size() == 1) { // if only 1 distinct elements
+            rollsRemainingLabel.setText("Five of a Kind!");
             return 10;
+        }
 
         // straight
         if(arr[0] == (arr[1] - 1) && arr[1] == (arr[2] - 1) &&
-           arr[2] == (arr[3] - 1) && arr[3] == (arr[4] - 1))
+           arr[2] == (arr[3] - 1) && arr[3] == (arr[4] - 1)) {
+            rollsRemainingLabel.setText("Straight!");
             return 8;
+        }
 
         // 4 of a kind, or full house.
         if (values.size() == 2) {
             // find 4 of a kind
-            if(arr[2] == arr[0] || arr[2] == arr[4])
+            if(arr[3] == arr[0] || arr[1] == arr[4]) {
+                rollsRemainingLabel.setText("Four of a Kind!");
                 return 7;
-            else
+            }
+            else {
+                rollsRemainingLabel.setText("Full House!");
                 return 6; // if not a 4 of a kind, it must be a full house
-
+            }
         }
 
         // 3 of a kind, or 2 pair
         if(values.size() == 3) {
             if((arr[0] == arr[1] && arr[1] == arr[2]) ||
                (arr[1] == arr[2] && arr[2] == arr[3]) ||
-               (arr[2] == arr[3] && arr[3] == arr[4]))
+               (arr[2] == arr[3] && arr[3] == arr[4])) {
+                rollsRemainingLabel.setText("Three of a Kind!");
                 return 5;
-            else
+            } else {
+                rollsRemainingLabel.setText("Two Pairs!");
                 return 4;
+            }
         }
 
         // 2 of a kind
-        if(values.size() == 4)
+        if(values.size() == 4) {
+            rollsRemainingLabel.setText("Two of a Kind!");
             return 1;
+        }
 
+        rollsRemainingLabel.setText("Nothing!");
         return 0;
 
     }
