@@ -42,6 +42,7 @@ public class Die {
                 case 6: setImage(diceImages[5]); break;
                 default: System.out.println("Error: at method setHeld of class die, switch 1"); break;
             }
+            // this.held = held;
         } else if (ready) {
             switch (value) {
                 case 1: setImage(heldImages[0]); break;
@@ -52,6 +53,7 @@ public class Die {
                 case 6: setImage(heldImages[5]); break;
                 default: System.out.println("Error: at method setHeld of class die, switch 2"); break;
             }
+            // this.held = held;
         }
     }
 
@@ -59,11 +61,12 @@ public class Die {
         this.value = value;
     }
 
-    public int roll() {
-        Random rand = new Random();
-        value = rand.nextInt(5) + 1;
-        rollImage();
-        return value;
+    public void roll() {
+        if(!held && ready) {
+            Random rand = new Random();
+            value = rand.nextInt(5) + 1;
+            rollImage();
+        }
     }
 
     public ImageView getView(){
@@ -96,9 +99,11 @@ public class Die {
     }
 
     public void reset() {
-        if(isHeld())
+        if(isHeld()) {
             setHeld(false);
-        ready = true;
+            setImage(diceImages[value - 1]);
+        }
+        // ready = true;
     }
 
     public void setReady(boolean bool) {

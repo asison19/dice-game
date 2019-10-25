@@ -152,8 +152,7 @@ public class DiceGame extends Application {
                 rollsRemainingLabel.setText(rollsRemainingText + rollsRemaining);
 
                 for (int i = 0; i < DICE_AMOUNT; i++) {
-                    if(!dice[i].isHeld())
-                        dice[i].roll();
+                    dice[i].roll();
                 }
 
                 if(rollsRemaining == 0) {
@@ -161,6 +160,7 @@ public class DiceGame extends Application {
 
                     // turn button to reset game
                     button.setText("Play Again");
+                    setAllReady(false);
 
                 }
             } else { // no more rolls remaining
@@ -169,6 +169,7 @@ public class DiceGame extends Application {
                     roundScore = calculateRoundScore();
                 else
                     firstRound.set(false);
+
                 overallScore += roundScore;
                 overallScoreLabel.setText(overallScoreText + overallScore);
 
@@ -218,7 +219,7 @@ public class DiceGame extends Application {
 
         // straight
         if(arr[0] == (arr[1] - 1) && arr[1] == (arr[2] - 1) &&
-           arr[3] == (arr[4] - 1) && arr[4] == (arr[5] - 1))
+           arr[2] == (arr[3] - 1) && arr[3] == (arr[4] - 1))
             return 8;
 
         // 4 of a kind, or full house.
